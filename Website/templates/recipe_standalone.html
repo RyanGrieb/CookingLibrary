@@ -1,0 +1,41 @@
+<!-- We have our own header, body,footer, js and everything, but in inherit form recipe.html when were in the body-->
+{% extends 'base.html' %} {% block head %} {% endblock %} {% block body %}
+
+<meta property="og:site_name" content="Cooking library" />
+<meta property="og:title" content="{{recipe.name}}" />
+<meta property="og:image" content="{{recipe.image_url}}" />
+
+<meta
+  property="description"
+  content="View {{recipe.name}} on Cooking Library, provided by {{recipe.website}}."
+/>
+<meta
+  property="og:description"
+  content="View {{recipe.name}} on Cooking Library, provided by {{recipe.website}}."
+/>
+<!-- <meta property="og:url" content="{{recipe.local_url}}" /> -->
+
+<meta
+  name="description"
+  content="A recipe search engine. Search for recipes from ingredients, or by name."
+/>
+
+<script src="https://unpkg.com/fast-average-color/dist/index.browser.min.js"></script>
+<script src="{{ url_for('static',filename='js/view_recipe.js') }}"></script>
+<script>
+  document.title = "{{recipe.name}} | Cooking Library"
+  // Get recipe info from DB, then display recipe information described in view_recipe.js
+  const recipe = JSON.parse(JSON.stringify({{ recipe | tojson | safe}}));
+
+  fetch("/static/json/ingredient_rules.json")
+    .then((response) => response.json())
+    .then((rulesJson) => {
+      if(Object.keys(recipe).length === 0)
+      {
+        // TODO: Tell the user this recipe wasn't found.
+        return;
+      }
+      showRecipe(recipe, rulesJson);
+    });
+</script>
+{% include 'recipe.html'%} {% endblock %}

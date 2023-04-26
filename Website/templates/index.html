@@ -1,0 +1,48 @@
+{% extends 'base.html' %} {% block head %} {% endblock %} {% block body %}
+<script src="{{ url_for('static',filename='js/index.js') }}"></script>
+<canvas id="canvas"></canvas>
+<div class="landing_div">
+  <div class="child-landing-div">
+    <img src="{{ url_for('static',filename='images/logo.png') }}" class="logo no_select" />
+    <div class="tags-input-container" id="tags-input-container">
+      <input />
+      <div class="input-status">
+        <i class="material-icons unhighlightable">none</i>
+      </div>
+    </div>
+    <div class="desc-container unhighlightable"><p>Search for recipes by...</p></div>
+    <div class="button-container">
+      <button type="button" class="{{ingredients_class}} ingredients" id="ingredients">
+        Ingredients
+      </button>
+      <button type="button" class="{{name_class}} name" id="name">Name</button>
+    </div>
+    <input type="hidden" name="button_value" id="button_value" value="ingredients" />
+  </div>
+</div>
+
+<meta
+  name="description"
+  content="A recipe search engine. Search for recipes from ingredients, or by name."
+/>
+
+<meta
+  name="og:description"
+  content="A recipe search engine. Search for recipes from ingredients, or by name."
+/>
+
+<script>
+  var rnd_ingredients = {{ ingredients | tojson }}
+
+  // Gradient
+  window.addEventListener("load", ()=>{
+    addEventListener('mousemove', (e) => {
+      const x = e.clientX - document.body.offsetTop;
+      const y = e.clientY - document.body.offsetTop;
+
+    //document.body.style.setProperty("--x",x+"px")
+    //document.body.style.setProperty("--y",y+"px")
+    });
+  });
+</script>
+{% endblock %}

@@ -1,0 +1,48 @@
+{
+    "rice": {
+        "forbid-same-sentence": [
+            "vinegar",
+            "wine"
+        ]
+    },
+    "chicken": {
+        "forbid-same-sentence": [
+            "broth"
+        ]
+    },
+    "salt": {
+        "forbid-same-sentence": [
+            "pork",
+            "ham",
+            "unsalted",
+            "saltine"
+        ]
+    },
+    "avocado": {
+        "forbid-same-sentence": [
+            "salsa"
+        ]
+    },
+    "garlic": {
+        "forbid-same-sentence": [
+            "chili sauce"
+        ]
+    },
+    "butter": {
+        "forbid-same-sentence": [
+            "peanut",
+            "buttermilk",
+            "buttercream"
+        ]
+    },
+    "pepper": {
+        "forbid-same-sentence": [
+            "red peppers"
+        ]
+    },
+    "steak": {
+        "forbid-same-sentence": [
+            "seasoning"
+        ]
+    }
+}

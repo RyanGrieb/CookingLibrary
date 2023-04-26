@@ -1,0 +1,66 @@
+{% extends 'base.html' %} {% block head %} {% endblock %} {% block body %}
+<script type="text/javascript">
+  const sortBy = "{{sort_by}}";
+  const orderBy = "{{order_by}}";
+  let viewingRecipe = false;
+  let ingredientLimit = "{{ingredient_limit}}";
+</script>
+<script src="https://unpkg.com/fast-average-color/dist/index.browser.min.js"></script>
+<script src="{{ url_for('static',filename='js/sort_recipe.js') }}"></script>
+<script src="{{ url_for('static',filename='js/view_recipe.js') }}"></script>
+<script src="{{ url_for('static',filename='js/recipes_list.js') }}"></script>
+
+<div class="sort-view hide">
+  <div class="left-darkened"></div>
+  <div class="sort-container sort-container-slide-1">
+    <div class="title">
+      <p>Filter Settings</p>
+      <i class="material-icons close-sort-container unhighlightable">close</i>
+    </div>
+    <div class="sort-options">
+      <div class="by-rating">
+        <p>⭐️ Rating Score</p>
+        <i class="material-icons unhighlightable" id="no-sort">height</i>
+      </div>
+      <div class="by-review-count">
+        <p>📊 Number of Reviews</p>
+        <i class="material-icons unhighlightable" id="no-sort">height</i>
+      </div>
+      <div class="by-name">
+        <p>🔤 Name</p>
+        <i class="material-icons unhighlightable" id="no-sort">height</i>
+      </div>
+      <div class="ingredient-count">
+        <p class="ingredients-slider-value" value="∞">#️⃣ Number of Ingredients: ∞</p>
+        <input type="range" min="1" max="51" value="51" class="ingredients-slider" />
+      </div>
+    </div>
+  </div>
+</div>
+
+{% include 'recipe.html' %}
+
+<div class="list-container">
+  <div class="search-container">
+    <a href="/">
+      <img src={{ url_for('static',filename='images/logo.png') }} class="small_logo" >
+    </a>
+    <div class="tags-input-container recipe-list" id="tags-input-container">
+      <input />
+      <div class="input-status">
+        <i class="material-icons unhighlightable">none</i>
+      </div>
+    </div>
+    <i class="material-icons sort-icon unhighlightable">filter_alt</i>
+  </div>
+  <div
+    class="all-recipes"
+    unsorted-recipe-ids="{{unsorted_recipe_ids}}"
+    recipe-ids="{{recipe_ids}}"
+  ></div>
+</div>
+
+<div class="scroll-up-container">
+  <i class="material-icons up-icon unhighlightable">arrow_upward</i>
+</div>
+{% endblock %}

@@ -1,0 +1,138 @@
+To enter into postgres land:
+1. Login to postgres sql user: sudo su - postgres or sudo -u postgres psql
+2. Enter into postgres terminal by typing: psql
+3. Done, now enter any postgres commands you'd like
+
+To create a new database:
+CREATE DATABASE dbname;
+
+List all databases:
+\l
+
+List tables:
+\d
+
+List table columns:
+\d table_name
+
+List all database sequences:
+\ds
+
+Connect to database:
+\c db_name
+
+Exit database:
+\q
+
+Delete database (DANGEROUS!!):
+DROP DATABASE db_name;
+
+Create table inside database:
+1. Connect to database
+CREATE TABLE recipe(
+    id BIGSERIAL NOT NULL PRIMARY KEY,
+    name TEXT NOT NULL,
+    url TEXT NOT NULL,
+    website TEXT NOT NULL,
+    authors TEXT[],
+    authors_urls TEXT[],
+    difficulty TEXT,
+    yield TEXT,
+    time TEXT[],
+    ingredients TEXT[],
+    directions TEXT[]
+);
+
+Insert row into table:
+INSERT INTO recipe (name,url,website) values ('foo','bar','fum');
+
+Remove row from table:
+DELETE FROM table_name WHERE (condition);
+DELETE FROM table_name WHERE id = 32;
+DELETE FROM table_name WHERE name = 'bob';
+
+Remove all rows from table:
+DELETE FROM table_name;
+
+Select all rows from table:
+SELECT * FROM table_name
+
+Select specific row from table:
+SELECT * FROM employees WHERE first_name = 'Sarah';
+SELECT * FROM recipe WHERE url = 'bla';
+
+Alter existing sequences:
+ALTER SEQUENCE product_id_seq RESTART WITH number
+
+Reset auto increment counter:
+TRUNCATE TABLE recipe RESTART IDENTITY; (DANGEROUS!!! DELETES TABLE)
+
+How to re-order id sequence in table from 1-1000. Instead of it being 232-1232.
+
+Get size of table:
+SELECT pg_size_pretty( pg_total_relation_size('table_name'));
+
+Database Structure:
+
+Problem: I don't want recipes w/ "Black Olives" to pop-up if the user types "Olives Black"
+Solution: We add ingredients in order into the join table. "Olives" will show up before "Black". So when reference join talbe, we check the join tables ID to get the order added.
+
+
+CREATE TABLE join_table(
+    id BIGSERIAL NOT NULL PRIMARY KEY,
+    recipe_id BIGSERIAL NOT NULL,
+    ingredient_id BIGSERIAL NOT NULL
+);
+
+CREATE TABLE ingredient(
+    id BIGSERIAL NOT NULL PRIMARY KEY,
+    name TEXT NOT NULL
+);
+
+Delete duplicate entries:
+DELETE FROM recipe a USING (
+      SELECT MIN(ctid) as ctid, image_url
+        FROM recipe 
+        GROUP BY image_url HAVING COUNT(*) > 1
+      ) b
+      WHERE a.image_url = b.image_url 
+      AND a.ctid <> b.ctid;
+
+
+Count rows in table:
+
+
+Delete duplicate recipes:
+DELETE FROM join_table
+WHERE recipe_id IN (
+  SELECT a.id
+  FROM recipe a
+  INNER JOIN (
+    SELECT MIN(ctid) as ctid, ingredients
+    FROM recipe 
+    GROUP BY ingredients HAVING COUNT(*) > 1
+  ) b
+  ON a.ingredients = b.ingredients 
+  AND a.ctid <> b.ctid
+);
+
+
+DELETE FROM recipe
+USING (
+  SELECT MIN(ctid) as ctid, ingredients
+  FROM recipe 
+  GROUP BY ingredients HAVING COUNT(*) > 1
+) b
+WHERE recipe.ingredients = b.ingredients 
+AND recipe.ctid <> b.ctid;
+
+
+Create table from another table (no data, just the command to create a new version of itself):
+sudo su - postgres
+pg_dump --schema-only --table=recipe recipes > recipe.sql
+
+Restart postgres service:
+sudo service postgresql restart
+
+Change postgres password:
+\password
